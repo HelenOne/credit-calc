@@ -2,62 +2,40 @@ import * as React from "react";
 
 export const Calculator = () => {
   const [creditSum, setCreditSum] = React.useState("");
-  const [creditpercent, setCreditPercent] = React.useState("");
+  const [creditPercent, setcreditPercent] = React.useState("");
   const [creditPeriod, setCreditPeriod] = React.useState("");
-  const [mounthlyPayment, setMounthlyPayment] = React.useState("");
+  // const [mounthlyPayment, setMounthlyPayment] = React.useState("");
 
-  const [annuityRate, setAnnuityRate] = React.useState(0);
+  const mounthlyPayment = React.useMemo(() => {
+    const percent = parseInt(creditPercent, 10) / (100 * 12);
+    const period = parseInt(creditPeriod, 10);
+    const annuityRateValue = percent + percent / ((1 + percent) ** period - 1);
 
-  const handleCreditSumChange = React.useCallback(
+    const mounthlyPaymentValue = annuityRateValue * parseInt(creditSum, 10);
+    return !Number.isNaN(mounthlyPaymentValue)
+      ? mounthlyPaymentValue.toFixed(2)
+      : "";
+  }, [creditPercent, creditPeriod, creditSum]);
+
+  const handleCreditSum = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setCreditSum(event.target.value);
-      setMounthlyPayment(
-        !Number.isNaN(annuityRate)
-          ? (annuityRate * parseInt(event.target.value, 10)).toFixed(2)
-          : ""
-      );
     },
-    [annuityRate]
+    []
   );
 
-  const handleCreditPercent = React.useCallback(
+  const handlecreditPercent = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCreditPercent(event.target.value);
-      const percent = parseInt(event.target.value, 10);
-      const period = parseInt(creditPeriod, 10);
-      const annuityRateValue =
-        ((percent / 100) * (1 + percent / 100) ** period) /
-        ((1 + percent / 100) ** period - 1);
-      setAnnuityRate(annuityRateValue);
-      const mounthlyPaymentValue = annuityRateValue * parseInt(creditSum, 10);
-
-      setMounthlyPayment(
-        !Number.isNaN(mounthlyPaymentValue)
-          ? mounthlyPaymentValue.toFixed(2)
-          : ""
-      );
+      setcreditPercent(event.target.value);
     },
-    [creditPeriod, creditSum]
+    []
   );
 
   const handleCreditPeriod = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setCreditPeriod(event.target.value);
-      const percent = parseInt(creditpercent, 10);
-      const period = parseInt(event.target.value, 10);
-      const annuityRateValue =
-        ((percent / 100) * (1 + percent / 100) ** period) /
-        ((1 + percent / 100) ** period - 1);
-      setAnnuityRate(annuityRateValue);
-      const mounthlyPaymentValue = annuityRateValue * parseInt(creditSum, 10);
-
-      setMounthlyPayment(
-        !Number.isNaN(mounthlyPaymentValue)
-          ? mounthlyPaymentValue.toFixed(2)
-          : ""
-      );
     },
-    [creditSum, creditpercent]
+    []
   );
 
   return (
@@ -71,7 +49,7 @@ export const Calculator = () => {
             id="credit-sum"
             value={creditSum}
             type="number"
-            onChange={handleCreditSumChange}
+            onChange={handleCreditSum}
           />
         </label>
         <label className="input-label" htmlFor="credit-percent">
@@ -79,9 +57,9 @@ export const Calculator = () => {
           <input
             className="credit-percent"
             id="credit-percent"
-            value={creditpercent}
+            value={creditPercent}
             type="number"
-            onChange={handleCreditPercent}
+            onChange={handlecreditPercent}
           />
         </label>
         <label className="input-label" htmlFor="credit-period">
