@@ -1,39 +1,30 @@
-import * as React from "react";
+import * as React from 'react';
+import { useObserver } from 'mobx-react-lite';
+import { store } from './store';
 
 export const Calculator = () => {
-  const [creditSum, setCreditSum] = React.useState("");
-  const [creditPercent, setcreditPercent] = React.useState("");
-  const [creditPeriod, setCreditPeriod] = React.useState("");
-  // const [mounthlyPayment, setMounthlyPayment] = React.useState("");
-
-  const mounthlyPayment = React.useMemo(() => {
-    const percent = parseInt(creditPercent, 10) / (100 * 12);
-    const period = parseInt(creditPeriod, 10);
-    const annuityRateValue = percent + percent / ((1 + percent) ** period - 1);
-
-    const mounthlyPaymentValue = annuityRateValue * parseInt(creditSum, 10);
-    return !Number.isNaN(mounthlyPaymentValue)
-      ? mounthlyPaymentValue.toFixed(2)
-      : "";
-  }, [creditPercent, creditPeriod, creditSum]);
+  const mounthlyPayment = useObserver(() => store.mounthlyPayment);
+  const creditSum = useObserver(() => store.creditSum);
+  const creditPercent = useObserver(() => store.creditPercent);
+  const creditPeriod = useObserver(() => store.creditPeriod);
 
   const handleCreditSum = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCreditSum(event.target.value);
+      store.creditSum = event.target.value;
     },
     []
   );
 
   const handlecreditPercent = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setcreditPercent(event.target.value);
+      store.creditPercent = event.target.value;
     },
     []
   );
 
   const handleCreditPeriod = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCreditPeriod(event.target.value);
+      store.creditPeriod = event.target.value;
     },
     []
   );
@@ -45,7 +36,7 @@ export const Calculator = () => {
         <label className="input-label" htmlFor="credit-sum">
           <span>Credit Sum</span>
           <input
-            className="credit-sum"
+            className="field credit-sum"
             id="credit-sum"
             value={creditSum}
             type="number"
@@ -55,7 +46,7 @@ export const Calculator = () => {
         <label className="input-label" htmlFor="credit-percent">
           <span>Credit Percent (per month) </span>
           <input
-            className="credit-percent"
+            className="field credit-percent"
             id="credit-percent"
             value={creditPercent}
             type="number"
@@ -65,7 +56,7 @@ export const Calculator = () => {
         <label className="input-label" htmlFor="credit-period">
           <span>Credit Period</span>
           <input
-            className="credit-period"
+            className="field credit-period"
             id="credit-period"
             value={creditPeriod}
             type="number"
@@ -74,7 +65,7 @@ export const Calculator = () => {
         </label>
         <div className="mounthly-payment">
           <span>Mounthly Payment</span>
-          <span>{mounthlyPayment || "0.00"}</span>
+          <span>{mounthlyPayment || '0.00'}</span>
         </div>
       </div>
     </div>

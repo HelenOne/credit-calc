@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,9 +9,9 @@ body {
   margin: 0;
 }
 
-input[type="number"] {
-  width: 200px;
-  height: 20px;
+.field {
+  width: 300px;
+  height: 30px;
   padding: 5px;
   box-shadow: 0 0 5px transparent;
   border-style: solid;
@@ -22,7 +22,7 @@ input[type="number"] {
   outline: none;
   border-radius: 2px;
 }
-input[type="number"]:focus {
+.field:focus {
   box-shadow: 0 0 5px palevioletred;
   border-color: palevioletred;
 }
@@ -35,7 +35,7 @@ input[type="number"]:focus {
   padding: 5px;
 }
 
-::selection {
+.field::selection {
   background: palevioletred;
   color: white;
 }

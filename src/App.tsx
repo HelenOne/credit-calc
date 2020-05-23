@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Calculator } from "./Calculator";
+import * as React from 'react';
+import { Calculator } from './Calculator';
 
 export const App = () => {
   return (
